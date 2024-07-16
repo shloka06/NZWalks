@@ -1,6 +1,6 @@
 ﻿namespace NZWalks.API.Models.Domain
 {
-    public class Region
+    public class Regions
     {
         public Guid Id { get; set; }
         public string Code { get; set; }

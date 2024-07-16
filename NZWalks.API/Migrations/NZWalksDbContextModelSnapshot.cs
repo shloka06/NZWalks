@@ -37,7 +37,7 @@ namespace NZWalks.API.Migrations
                     b.ToTable("Difficulty");
                 });
 
-            modelBuilder.Entity("NZWalks.API.Models.Domain.Region", b =>
+            modelBuilder.Entity("NZWalks.API.Models.Domain.Regions", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,7 +56,7 @@ namespace NZWalks.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Region");
+                    b.ToTable("Regions");
                 });
 
             modelBuilder.Entity("NZWalks.API.Models.Domain.Walk", b =>
@@ -105,7 +105,7 @@ namespace NZWalks.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NZWalks.API.Models.Domain.Region", "Region")
+                    b.HasOne("NZWalks.API.Models.Domain.Regions", "Regions")
                         .WithMany()
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -113,7 +113,7 @@ namespace NZWalks.API.Migrations
 
                     b.Navigation("Difficulty");
 
-                    b.Navigation("Region");
+                    b.Navigation("Regions");
                 });
 #pragma warning restore 612, 618
         }
