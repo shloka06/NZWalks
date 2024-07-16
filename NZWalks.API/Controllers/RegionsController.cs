@@ -27,5 +27,20 @@ namespace NZWalks.API.Controllers
 
             return Ok(regions);
         }
+
+        // GET SINGLE REGION (Get Region By ID)
+        // GET: https://localhost:1234/api/regions/{id}
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public IActionResult GetById([FromRoute] Guid id)
+        {
+            //var region = dbContext.Regions.Find(id); --> Find() takes in Primary Key only. For others, use FirstOrDefault()
+            var region = dbContext.Regions.FirstOrDefault(r => r.Id == id);
+
+            if(region != null)
+                return Ok(region);
+
+            return NotFound();
+        }
     }
 }
