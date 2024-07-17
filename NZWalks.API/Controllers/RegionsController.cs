@@ -70,7 +70,7 @@ namespace NZWalks.API.Controllers
             return NotFound();
         }
 
-        // POST REGION
+        // POST TO CREATE NEW REGION
         // POST: https://localhost:1234/api/regions
         [HttpPost]
         public IActionResult Create([FromBody] AddRegionRequestDto addRegionRequestDto)
@@ -97,6 +97,39 @@ namespace NZWalks.API.Controllers
             };
 
             return CreatedAtAction(nameof(GetById), new { id = regionDomainModel.Id }, regionDto);
+        }
+
+        // UPDATE REGION
+        // PUT: https://localhost:1234/api/regions/{id}
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
+        {
+            // Check if Region Exists
+            var regionDomainModel = dbContext.Region.FirstOrDefault(r => r.Id == id);
+
+            if (regionDomainModel == null)
+            {
+                return NotFound();
+            }
+
+            // Map DTO to Domain Model
+            regionDomainModel.Code = updateRegionRequestDto.Code;
+            regionDomainModel.Name = updateRegionRequestDto.Name;
+            regionDomainModel.RegionImageUrl = updateRegionRequestDto.RegionImageUrl;
+
+            dbContext.SaveChanges();
+
+            // Convert Domain Model back to DTO
+            var regionDto = new RegionDto 
+            { 
+                Id=regionDomainModel.Id,
+                Code = regionDomainModel.Code,
+                Name = regionDomainModel.Name,
+                RegionImageUrl = regionDomainModel.RegionImageUrl
+            };
+
+            return Ok(regionDto);
         }
     }
 }
