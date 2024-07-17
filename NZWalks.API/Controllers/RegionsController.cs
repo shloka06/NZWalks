@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NZWalks.API.Data;
 using NZWalks.API.Models.Domain;
+using NZWalks.API.Models.DTO;
 
 namespace NZWalks.API.Controllers
 {
@@ -23,9 +24,24 @@ namespace NZWalks.API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var regions = dbContext.Regions.ToList();
+            // Get Data from Database - Domain Models
+            var regionsDomain = dbContext.Region.ToList();
 
-            return Ok(regions);
+            // Map Domain Models to DTOs
+            var regionsDto = new List<RegionDto>();
+            foreach (var region in regionsDomain)
+            {
+                regionsDto.Add(new RegionDto()
+                {
+                    Id = region.Id,
+                    Code = region.Code,
+                    Name = region.Name,
+                    RegionImageUrl = region.RegionImageUrl
+                });
+            }
+
+            // Return DTOs back to Client
+            return Ok(regionsDto);
         }
 
         // GET SINGLE REGION (Get Region By ID)
@@ -34,11 +50,24 @@ namespace NZWalks.API.Controllers
         [Route("{id:Guid}")]
         public IActionResult GetById([FromRoute] Guid id)
         {
+            // Get Data from Database - Domain Models
             //var region = dbContext.Regions.Find(id); --> Find() takes in Primary Key only. For others, use FirstOrDefault()
-            var region = dbContext.Regions.FirstOrDefault(r => r.Id == id);
+            var region = dbContext.Region.FirstOrDefault(r => r.Id == id);
 
-            if(region != null)
-                return Ok(region);
+            // Map Domain Models to DTOs
+            if (region != null)
+            {
+                var regionDto = new RegionDto()
+                {
+                    Id = region.Id,
+                    Code = region.Code,
+                    Name = region.Name,
+                    RegionImageUrl = region.RegionImageUrl
+                };
+
+                // Return DTOs back to Client
+                return Ok(regionDto);
+            }
 
             return NotFound();
         }
