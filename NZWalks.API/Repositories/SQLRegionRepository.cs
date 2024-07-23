@@ -18,7 +18,8 @@ namespace NZWalks.API.Repositories
 
         public async Task<Region?> GetByIdAsync(Guid id)
         {
-            return await dbContext.Region.FirstOrDefaultAsync(r => r.Id == id);
+            // var region = dbContext.Regions.Find(id); --> Find() takes in Primary Key only. For others, use FirstOrDefault()
+            return await dbContext.Region.FirstOrDefaultAsync(r => r.Id == id); 
         }
 
         public async Task<Region> CreateAsync(Region region)
